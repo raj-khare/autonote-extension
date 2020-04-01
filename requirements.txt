@@ -2,3 +2,4 @@ gensim
 requests
 bs4
 flask
+gunicorn
