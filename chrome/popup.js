@@ -14,14 +14,17 @@ const loadingContainer = document.getElementById("loading-container");
 
 const getNotes = async url => {
   try {
-    const response = await fetch("http://127.0.0.1:5000/notes", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ url })
-    });
+    const response = await fetch(
+      "https://autonote-extension.herokuapp.com/notes",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ url })
+      }
+    );
     if (response.status >= 400 && response.status < 600) {
       throw new Error();
     }
