@@ -15,7 +15,7 @@ def notes():
     if not re.match(r"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)", url):
         return jsonify({'error': 'Bad url format'}), 400
 
-    article = requests.get(url).text
+    article = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}).text
     article_parsed = BeautifulSoup(article, 'html.parser')
     paragraphs = article_parsed.find_all('p')  # Getting all <p>CONTENT</p>
     article_content = []
