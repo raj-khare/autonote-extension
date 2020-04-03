@@ -1,5 +1,5 @@
 import re
-from gensim.summarization import summarize
+from summarizer import Summarizer
 from bs4 import BeautifulSoup
 import requests
 from flask import Flask, request, jsonify
@@ -9,9 +9,9 @@ app = Flask(__name__)
 @app.route('/notes', methods=['POST'])
 def notes():
     data = request.json
-    url = data.get('url', None)
-    if not url:
+    if not data or not data.get('url', None):
         return jsonify({'error': 'No url is given'}), 400
+    url = data['url']
     if not re.match(r"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)", url):
         return jsonify({'error': 'Bad url format'}), 400
 
@@ -21,7 +21,8 @@ def notes():
     article_content = []
     for p in paragraphs:
         article_content.append(p.text)
-    return jsonify({'notes': summarize("".join(article_content), word_count=200, split=True)})
+    model = Summarizer()
+    return jsonify({'notes': model("".join(article_content))})
 
 
 if __name__ == "__main__":
